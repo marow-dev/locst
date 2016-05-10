@@ -1,0 +1,103 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+	<script src="ls.js"></script>
+	<script>
+		$(document).ready(function () {
+			function generateKeysTable() {
+				var table = $('<table><tr><th>Key</th><th>Value</th><th></th></tr></table>');
+				ls.each(function (k, v) {
+					table.append('<tr><td>' + k + '</td><td>' + v + '</td><td class="remove" data-key="' + k + '">Remove</td></tr>');
+				});
+				return table;
+			}
+
+			function refreshKeys() {
+				$('#divKeys').html(generateKeysTable());
+				$('table td.remove').click(function () {
+					var key = $(this).data('key');
+					if (key) {
+						ls.remove(key);
+						refreshKeys();
+					}
+				});
+			}
+
+			$('#add_key').click(function () {
+				var key = $('input[name="add_key"]').val();
+				var val = $('input[name="add_value"]').val();
+				if (key && val) {
+					ls.set(key, val);
+					refreshKeys();
+				}
+			});
+			$('#remove_key').click(function () {
+				var key = $('input[name="remove_key"]').val();
+				if (key) {
+					ls.remove(key.split(','));
+					refreshKeys();
+				}
+			});
+			refreshKeys();
+		});
+	</script>
+	<style>
+		body {
+			font-family: Arial;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			border-spacing: 0px;
+		}
+		table td {
+			border: 1px solid #bbb;
+			padding: 5px;
+		}
+		table td:nth-child(1n) {
+			width: 25%;
+		}
+		table td:nth-child(2n) {
+			width: 65%;
+		}
+		table td.remove {
+			font-weight: bold;
+			font-size: 12px;
+			text-align: center;
+		}
+		.keys_list {
+			padding: 10px;
+		}
+		.panel {
+			border: 1px solid #bbb;
+			padding: 10px;
+			margin-bottom: 5px;
+		}
+		.header {
+			font-weight: bold;
+			font-size: 16px;
+			padding-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="keys_list" id="divKeys"></div>
+	<section class="panel">
+		<div class="header">Add new key/value</div>
+		<label for="add_key">Key</label>
+		<input type="text" name="add_key"></input>
+		<label for="add_value">Value</label>
+		<input type="text" name="add_value"></input>
+		<button id="add_key">Confirm</button>
+	</section>
+	<section class="panel">
+		<div class="header">Remove key</div>
+		<label for="remove_key">Key</label>
+		<input type="text" name="remove_key"></input>
+		<button id="remove_key">Remove</button>
+	</section>
+</body>
+</html>
