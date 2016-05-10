@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
 	<title>QUnit Test</title>
-	<script src="ls.js"></script>
+	<script src="../src/ls.js"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.23.1.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
 	<div id="qunit-fixture"></div>
 	<script src="https://code.jquery.com/qunit/qunit-1.23.1.js"></script>
 	<script>
-		QUnit.test('basic', function (assert) {
+		QUnit.test('adding and retrieveng keys', function (assert) {
 			ls.clear();
 			ls.set('key1', 'val1');
 			ls.set('key2', 'val2');
@@ -26,17 +26,21 @@
 			assert.equal(ls.keyExists('key2'), true);
 			assert.equal(ls.keyExists('key3'), true);
 			assert.equal(ls.keyExists('key4'), false);
-
-			ls.remove('key1');
-			assert.equal(ls.count(), 2);
-			assert.equal(ls.keyExists('key1'), false);
-			assert.equal(ls.keyExists('key2'), true);
-			ls.remove(['key2', 'key3']);
-			assert.equal(ls.count(), 0);
-			assert.equal(ls.keyExists('key1'), false);
-			assert.equal(ls.keyExists('key2'), false);
-			assert.equal(ls.keyExists('key3'), false);
 		});
+        QUnit.test('adding adn removing keys', function (assert) {
+            ls.clear();
+            assert.equal(ls.count(), 0);
+            ls.set('key1', 'val1');
+			ls.set('key2', 'val2');
+			ls.set('key3', 'val3');
+            assert.equal(ls.count(), 3);
+            ls.remove('key1');
+            assert.equal(ls.count(), 2);
+            ls.remove('key4');
+            assert.equal(ls.count(), 2);
+            ls.remove(['key2', 'key3']);
+            assert.equal(ls.count(), 0);
+        });
 	</script>
 </body>
 </html>

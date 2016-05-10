@@ -3,15 +3,20 @@
 	<meta charset="utf-8">
 	<script src="jquery.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-	<script src="ls.js"></script>
+	<script src="../src/ls.js"></script>
 	<script>
 		$(document).ready(function () {
 			function generateKeysTable() {
-				var table = $('<table><tr><th>Key</th><th>Value</th><th></th></tr></table>');
-				ls.each(function (k, v) {
-					table.append('<tr><td>' + k + '</td><td>' + v + '</td><td class="remove" data-key="' + k + '">Remove</td></tr>');
-				});
-				return table;
+                var html = '';
+                if (ls.count() === 0) {
+                    html = $('<p class="message">LocalStorage is empty</p>');
+                } else {
+                    html = $('<table><tr><th>Key</th><th>Value</th><th></th></tr></table>');
+    				ls.each(function (k, v) {
+    					html.append('<tr><td>' + k + '</td><td>' + v + '</td><td class="remove" data-key="' + k + '">Remove</td></tr>');
+    				});
+                }
+				return html;
 			}
 
 			function refreshKeys() {
@@ -80,6 +85,10 @@
 			font-size: 16px;
 			padding-bottom: 10px;
 		}
+        .message {
+            text-align: center;
+            font-weight: bold;
+        }
 	</style>
 </head>
 
