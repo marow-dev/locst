@@ -1,4 +1,5 @@
 var ls = function () {
+    'use strict';
     if ( ! storageAvailable('localStorage')) {
         throw "Web storage is not supported";
     }
@@ -17,10 +18,22 @@ var ls = function () {
         }
     }
 
+    /**
+     * Is local storage empty
+     * 
+     * @method empty
+     * @return {Boolean} Returns true if local storage is empty
+     */
     function empty() {
         return store.length === 0;
     }
 
+    /**
+     * List of keys
+     *
+     * @method keys
+     * @return {Array} Returns array of keys defined in local storage
+     */
     function keys() {
         var keys = [];
         if ( ! empty()) {
@@ -31,15 +44,35 @@ var ls = function () {
         return keys;
     }
 
+    /**
+     * Number of stored keys
+     *
+     * @method count
+     * @return {Integer}
+     */
     function count() {
         return store.length;
     }
 
+    /**
+     * Check if key exists
+     *
+     * @method keyExists
+     * @param {String} key Key name to be checked
+     * @return {Boolean}
+     */
     function keyExists(key) {
         var keys = this.keys();
         return keys.indexOf(key) != -1 ? true : false;
     }
 
+    /**
+     * Remove keys
+     *
+     * @method remove
+     * @param {String}{Array} keys Key name or list of keys
+     * @return {Boolean}
+     */
     function remove(keys) {
         if (typeof keys === 'object') {
             keys.forEach(function (v) {
@@ -48,41 +81,106 @@ var ls = function () {
         } else {
             store.removeItem(keys);
         }
+        return true;
     }
 
+    /**
+     * Returns value by index
+     *
+     * @method getByIndex
+     * @param {Integer} index Index of stored key
+     * @return Returns value stored in index
+     */
     function getByIndex(index) {
         var key = store.key(index);
         if (key) {
-            return store.getItem(key);
+            return getItem(key);
         }
     }
 
+    /**
+     * Returns all stored values
+     *
+     * @method getAll
+     * @return {Object} Lista of stored key - value pairs
+     */
     function getAll() {
         var ret = {};
         if ( ! empty()) {
             keys().forEach(function (k) {
-                ret[k] = store.getItem(k);
+                ret[k] = getItem(k);
             });
         }
         return ret;
     }
 
+    /**
+     * Return value stored in specified key or keys
+     *
+     * @method get
+     * @param {String}{Array} keys Key name or list of keys
+     * @return Value stored in key or object with key - value pairs
+     */
     function get(keys) {
         var ret = false;
         if (typeof keys === 'object') {
             keys.forEach(function (v) {
-                ret[v] = store.getItem(v);
+                ret[v] = getItem(v);
             });
         } else {
-            ret = store.getItem(keys);
+            ret = getItem(keys);
         }
         return ret;
     }
 
-    function set(key, value) {
-        return store.setItem(key, value);
+    /**
+     * Return value stored in key
+     *
+     * @method getItem
+     * @param {String} key Key name
+     * @return
+     */
+    function getItem(key) {
+        return JSON.parse(store.getItem(key));
     }
 
+    /**
+     * Saves value in key
+     *
+     * @method setItem
+     * @param {String} key Key name
+     * @param value Value
+     * @return {Boolean}
+     */
+    function setItem(key, value) {
+        var r = true;
+        try { 
+            store.setItem(key, value);
+        }
+        catch (err) {
+            r = false;
+        }
+        return r;
+    }
+
+    /**
+     * Saves value in specified key
+     *
+     * @method set
+     * @param {String} key
+     * @param value
+     * @return {Boolean}
+     */
+    function set(key, value) {
+        return setItem(key, JSON.stringify(value));
+    }
+
+    /**
+     * Executes function on all stored values
+     *
+     * @method each
+     * @param {Function} f
+     */
     function each(f) {
         if (typeof f === 'function' && ! empty()) {
             keys().forEach(function (k) {
@@ -92,6 +190,11 @@ var ls = function () {
         }
     }
 
+    /**
+     * Removed all key - value pairs
+     *
+     * @method clear
+     */
     function clear() {
         store.clear();
     }
@@ -102,6 +205,7 @@ var ls = function () {
         count: count,
         keyExists: keyExists,
         get: get,
+        getAll: getAll,
         set: set,
         remove: remove,
         each: each,

@@ -1,0 +1,39 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+	<script src="../src/ls.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#addObject').click(function () {
+				var result;
+				result = ls.set('store-object', { key1: 'value1', key2: 'value2' });
+				if (result === true) {
+					$('div.result').append('store-object - OK<br>');
+				} else {
+					$('div.result').append('store-object - OK<br>');
+				}
+				result = ls.set('store-array', ['value1', 'value2', 'value3']);
+				if (result === true) {
+					$('div.result').append('store-array - OK<br>');
+				} else {
+					$('div.result').append('store-array - ERR<br>');
+				}
+
+				result = ls.get('store-object');
+				$('div.result').append('stored-object - ' + result + '<br>');
+				result = ls.get('store-array');
+				$('div.result').append('stored-array - ' + result);
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div class="result"></div>
+	<section class="panel">
+		<button id="addObject">Add object</button>
+	</section>
+</body>
+</html>
