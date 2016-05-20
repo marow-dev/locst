@@ -1,6 +1,6 @@
 var ls = function () {
     'use strict';
-    if ( ! storageAvailable('localStorage')) {
+    if (!storageAvailable('localStorage')) {
         throw "Web storage is not supported";
     }
 
@@ -9,18 +9,18 @@ var ls = function () {
     function storageAvailable(type) {
         try {
             var storage = window[type],
-            x = '__storage_test__';
+                x = '__storage_test__';
             storage.setItem(x, x);
             storage.removeItem(x);
             return true;
-        } catch(e) {
+        } catch (e) {
             return false;
         }
     }
 
     /**
      * Is local storage empty
-     * 
+     *
      * @method empty
      * @return {Boolean} Returns true if local storage is empty
      */
@@ -35,13 +35,14 @@ var ls = function () {
      * @return {Array} Returns array of keys defined in local storage
      */
     function keys() {
-        var keys = [];
-        if ( ! empty()) {
-            for (var i = 0; i <= store.length - 1; i++) {
-                keys.push(store.key(i));
+        var keysList = [],
+            i;
+        if (!empty()) {
+            for (i = 0; i <= store.length - 1; i++) {
+                keysList.push(store.key(i));
             }
         }
-        return keys;
+        return keysList;
     }
 
     /**
@@ -62,8 +63,8 @@ var ls = function () {
      * @return {Boolean}
      */
     function keyExists(key) {
-        var keys = this.keys();
-        return keys.indexOf(key) != -1 ? true : false;
+        var keysList = this.keys();
+        return keysList.indexOf(key) !== -1 ? true : false;
     }
 
     /**
@@ -106,7 +107,7 @@ var ls = function () {
      */
     function getAll() {
         var ret = {};
-        if ( ! empty()) {
+        if (!empty()) {
             keys().forEach(function (k) {
                 ret[k] = getItem(k);
             });
@@ -154,10 +155,9 @@ var ls = function () {
      */
     function setItem(key, value) {
         var r = true;
-        try { 
+        try {
             store.setItem(key, value);
-        }
-        catch (err) {
+        } catch (err) {
             r = false;
         }
         return r;
@@ -182,7 +182,7 @@ var ls = function () {
      * @param {Function} f
      */
     function each(f) {
-        if (typeof f === 'function' && ! empty()) {
+        if (typeof f === 'function' && !empty()) {
             keys().forEach(function (k) {
                 var v = get(k);
                 f(k, v);
@@ -209,17 +209,6 @@ var ls = function () {
         set: set,
         remove: remove,
         each: each,
-        clear: clear,
-        [Symbol.iterator]: function() {
-            var index = 0;
-            return {
-                next: function () {
-                    var value = getByIndex(index);
-                    var done = index >= store.length;
-                    index++;
-                    return {value, done};
-                }
-            }
-        }
+        clear: clear
     };
 }();

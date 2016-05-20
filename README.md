@@ -12,5 +12,3 @@ Javascript localStorage wrapper
 - remove - removes key or list of keys,
 - each - executes a function on all keys in local storage,
 - clear - removes all keys,
-
-Object provides also iterator.
